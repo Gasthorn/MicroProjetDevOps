@@ -27,7 +27,28 @@ async function loadDifficulties() {
     init(); 
 }
 
+function saveScore(score) {
+    let scores = JSON.parse(localStorage.getItem("snakeScores")) || [];
+    scores.push({ score: score, date: new Date().toLocaleString() });
+    scores.sort((a, b) => b.score - a.score);
+    scores = scores.slice(0, 10);
+    localStorage.setItem("snakeScores", JSON.stringify(scores));
+}
+
+function updateLeaderboard() {
+    const leaderboard = document.getElementById("leaderboard");
+    if (!leaderboard) return;
+    leaderboard.innerHTML = "";
+    const scores = JSON.parse(localStorage.getItem("snakeScores")) || [];
+    scores.forEach(s => {
+        const li = document.createElement("li");
+        li.textContent = `${s.score} points - ${s.date}`;
+        leaderboard.appendChild(li);
+    });
+}
+
 loadDifficulties();
+updateLeaderboard();
 
 difficultySelect.addEventListener("change", () => {
     resetGame();
@@ -105,6 +126,9 @@ function update() {
     if (isWallCollision(snakeX, snakeY) || collision(newHead, snake)) {
         running = false;
         alert("Game Over !");
+
+        saveScore(score);
+        updateLeaderboard();
         return;
     }
 
