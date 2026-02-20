@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "lowdb": "^7.0.1",
+    "sqlite3": "^5.1.7"
+  },
+  "name": "microprojetdevops",
+  "version": "1.0.0",
+  "description": "Ce TP a pour but de vous permettre de mettre en pratique l'ensemble des connaissances acquises durant les TDs sur Git, Docker et l'intégration continue (CI/CD). Vous devrez construire un projet DevOps complet, depuis la création du dépôt Git jusqu'à la mise en place d'une chaîne d'intégration continue automatisée.",
+  "main": "script.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gasthorn/MicroProjetDevOps.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Gasthorn/MicroProjetDevOps/issues"
+  },
+  "homepage": "https://github.com/Gasthorn/MicroProjetDevOps#readme"
+}

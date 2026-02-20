@@ -1,0 +1,7 @@
+{
+  "difficulties": {
+    "easy": { "updateInterval": 200, "canvasSize": 200 },
+    "medium": { "updateInterval": 150, "canvasSize": 400 },
+    "hard": { "updateInterval": 100, "canvasSize": 600 }
+  }
+}
