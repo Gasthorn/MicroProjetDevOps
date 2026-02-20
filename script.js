@@ -13,11 +13,15 @@ let running = false;
 let directionChanged = false;
 
 let lastUpdateTime = 0;
-let updateInterval = 120;
+let updateInterval;
 
 document.addEventListener("keydown", changeDirection);
 
 function init() {
+    let difficulty = document.getElementById("difficulty").value;
+    if (difficulty === "easy")updateInterval = 200;
+    if (difficulty === "medium")updateInterval = 150;
+    if (difficulty === "hard")updateInterval = 100;
     snake = [{ x: 6 * box, y: 10 * box }];
     direction = "RIGHT";
     score = 0;
