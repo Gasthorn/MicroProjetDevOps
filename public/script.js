@@ -1,5 +1,12 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const playerNameInput = document.getElementById("playerName");
+
+playerNameInput.addEventListener("input", () => {
+    playerNameInput.value = playerNameInput.value
+        .replace(/[^a-zA-Z]/g, "")
+        .toUpperCase();
+});
 
 const box = 20;
 let canvasSize = 400;
@@ -16,61 +23,91 @@ let lastUpdateTime = 0;
 let updateInterval;
 
 let difficulties; 
+let currentPlayer = "";
+
+playerNameInput.addEventListener("input", () => {
+    playerNameInput.value = playerNameInput.value
+        .replace(/[^a-zA-Z]/g, "")
+        .toUpperCase();
+
+    currentPlayer = playerNameInput.value;
+});
 
 const difficultySelect = document.getElementById("difficulty");
 
 document.addEventListener("keydown", changeDirection);
 
-async function loadDifficulties() {
-    const res = await fetch('./data.json');
-    difficulties = await res.json();
-    init(); 
-}
+async function loadDifficultyFromServer() {
+    const difficulty = difficultySelect.value;
 
-function saveScore(score) {
-    let scores = JSON.parse(localStorage.getItem("snakeScores")) || [];
-    scores.push({ score: score, date: new Date().toLocaleString() });
-    scores.sort((a, b) => b.score - a.score);
-    scores = scores.slice(0, 10);
-    localStorage.setItem("snakeScores", JSON.stringify(scores));
-}
+    const res = await fetch("/difficulty/" + difficulty)
+    const params = await res.json();
 
-function updateLeaderboard() {
-    const leaderboard = document.getElementById("leaderboard");
-    if (!leaderboard) return;
-    leaderboard.innerHTML = "";
-    const scores = JSON.parse(localStorage.getItem("snakeScores")) || [];
-    scores.forEach(s => {
-        const li = document.createElement("li");
-        li.textContent = `${s.score} points - ${s.date}`;
-        leaderboard.appendChild(li);
-    });
-}
-
-loadDifficulties();
-updateLeaderboard();
-
-difficultySelect.addEventListener("change", () => {
-    resetGame();
-});
-
-function init() {
-    const difficulty = document.getElementById("difficulty").value;
-    const params = difficulties.difficulties[difficulty];
-
-    updateInterval = params.updateInterval;
-    canvasSize = params.canvasSize;
+    updateInterval = params.update_interval;
+    canvasSize = params.canvas_size;
     gridSize = canvasSize / box;
 
     canvas.width = canvasSize;
     canvas.height = canvasSize;
 
-    snake = [{ x: Math.floor(gridSize / 4) * box, y: Math.floor(gridSize / 2) * box }];
+    initGame();
+}
+
+async function saveScore(score) {
+    await fetch("/score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            playerName: currentPlayer,
+            score,
+            difficulty: difficultySelect.value
+        })
+    });
+
+    playerNameInput.value = ""; 
+    updateLeaderboard();
+}
+
+async function updateLeaderboard() {
+    const difficulty = difficultySelect.value;
+    const res = await fetch("/leaderboard/" + difficulty);
+    const scores = await res.json();
+
+    const leaderboard = document.getElementById("leaderboard");
+    leaderboard.innerHTML = "";
+
+    scores.forEach(s => {
+        const li = document.createElement("li");
+        li.textContent = `${s.player_name} - ${s.score}`;
+        leaderboard.appendChild(li);
+    });
+}
+
+loadDifficultyFromServer();
+updateLeaderboard();
+
+difficultySelect.addEventListener("change", async () => {
+    await loadDifficultyFromServer();
+    updateLeaderboard();
+});
+
+function initGame() {
+    playerNameInput.value = currentPlayer;
+    snake = [{
+        x: Math.floor(gridSize / 4) * box,
+        y: Math.floor(gridSize / 2) * box
+    }];
+
     direction = "RIGHT";
     score = 0;
+    running = false;
+
     document.getElementById("score").innerText = score;
 
-    food = { x: Math.floor(gridSize / 4) * 3 * box, y: Math.floor(gridSize / 2) * box };
+    food = {
+        x: Math.floor(gridSize / 4) * 3 * box,
+        y: Math.floor(gridSize / 2) * box
+    };
     render();
 }
 
@@ -86,16 +123,12 @@ function randomFoodPosition() {
 }
 
 function startGame() {
+    initGame();
     if (!running) {
         running = true;
         lastUpdateTime = 0;
         requestAnimationFrame(gameLoop);
     }
-}
-
-function resetGame() {
-    running = false;
-    init();
 }
 
 function gameLoop(timestamp) {
@@ -124,11 +157,12 @@ function update() {
     let newHead = { x: snakeX, y: snakeY };
 
     if (isWallCollision(snakeX, snakeY) || collision(newHead, snake)) {
+        if (playerNameInput.value.length >= 3) {
+            saveScore(score);
+        } else {
+            alert("Entrez un pseudo (3-5 lettres) avant de jouer !");
+        }
         running = false;
-        alert("Game Over !");
-
-        saveScore(score);
-        updateLeaderboard();
         return;
     }
 

@@ -8,6 +8,16 @@
 <body>
 
     <h1>Micro-Projet DevOps : Snake</h1>
+    <div id="playerInputContainer">
+        <label for="playerName">Pseudo :</label>
+        <input 
+            type="text" 
+            id="playerName" 
+            maxlength="5" 
+            placeholder="AAA"
+            autocomplete="off"
+        />
+    </div>
     <p>Score : <span id="score">0</span></p>
 
     <canvas id="gameCanvas" width="400" height="400"></canvas>
@@ -20,8 +30,6 @@
     </select>
     <br>
     <button onclick="startGame()">Démarrer</button>
-    <button onclick="resetGame()">Réinitialiser</button>
-
     <div>
         <h2>Leaderboard</h2>
         <ol id="leaderboard"></ol>
