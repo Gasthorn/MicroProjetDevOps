@@ -72,11 +72,14 @@ async function updateLeaderboard() {
     const difficulty = difficultySelect.value;
     const res = await fetch("/leaderboard/" + difficulty);
     const scores = await res.json();
+    const topScores = scores
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5);
 
     const leaderboard = document.getElementById("leaderboard");
     leaderboard.innerHTML = "";
 
-    scores.forEach(s => {
+    topScores.forEach(s => {
         const li = document.createElement("li");
         li.textContent = `${s.player_name} - ${s.score}`;
         leaderboard.appendChild(li);
