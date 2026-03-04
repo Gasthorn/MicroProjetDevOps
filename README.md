@@ -12,6 +12,7 @@ Pour réaliser ce tp, j'ai choisi de coder un serveur web représentant une born
 * Démarrage de la partie avec le bouton **Démarrer**, navigation avec les flèches du clavier.
 * Score sauvegardé automatiquement dans le **Leaderboard**.
 ## Installation et Lancement
+(Le projet est disponible sur un Codespace sur cet espace Git)
 ### Prérequis
 * Docker/ GitHub Codespaces
 * Port **3000** disponible
