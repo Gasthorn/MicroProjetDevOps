@@ -123,6 +123,10 @@ function randomFoodPosition() {
 }
 
 function startGame() {
+    if (playerNameInput.value.length < 3) {
+        alert("Entrez un pseudo (3-5 lettres) avant de jouer !");
+        return;
+    }
     initGame();
     if (!running) {
         running = true;
