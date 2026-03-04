@@ -8,35 +8,6 @@ app.use(express.json());
 app.use(express.static("public"));
 
 const db = new sqlite3.Database("./snake.db");
-db.serialize(() => {
-    db.run(`
-        CREATE TABLE IF NOT EXISTS difficulties (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT UNIQUE NOT NULL,
-            update_interval INTEGER NOT NULL,
-            canvas_size INTEGER NOT NULL
-        )
-    `);
-
-    db.run(`
-        CREATE TABLE IF NOT EXISTS leaderboard (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            player_name TEXT NOT NULL,
-            score INTEGER NOT NULL,
-            difficulty_id INTEGER NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (difficulty_id) REFERENCES difficulties(id)
-        )
-    `);
-
-    db.run(`
-        INSERT OR IGNORE INTO difficulties (id, name, update_interval, canvas_size)
-        VALUES
-        (1, 'easy', 200, 300),
-        (2, 'medium', 150, 500),
-        (3, 'hard', 100, 700)
-    `);
-});
 
 // 🔹 GET difficulté
 app.get("/difficulty/:name", (req, res) => {
