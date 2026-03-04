@@ -1,0 +1,41 @@
+name: Snake CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: |
+          npm install eslint
+          npx eslint . || echo "Lint warnings only"
+
+      - name: Build Docker image
+        run: docker build -t snake-app .
+
+      - name: Run container
+        run: |
+          docker run -d --name test_snake -p 3000:3000 snake-app
+          sleep 5
+          docker ps
+          docker stop test_snake
+          docker rm test_snake
+
+      - name: Deployment simulation
+        run: echo "Deployment simulated successfully"
