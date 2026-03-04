@@ -9,4 +9,7 @@ COPY . .
 
 EXPOSE 3000
 
+RUN mkdir -p /app/data && chown -R node:node /app/data
+USER node
+
 CMD ["node", "server.js"]

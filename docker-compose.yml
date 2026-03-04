@@ -7,8 +7,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - sqlite_data:/app
+      - ./data:/app/data
+    user: "node"
     restart: unless-stopped
 
-volumes:
-  sqlite_data:
