@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  snake-app:
+    build: .
+    container_name: snake_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    user: "node"
+    restart: unless-stopped
+

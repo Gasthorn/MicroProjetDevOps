@@ -7,8 +7,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-const db = new sqlite3.Database("./snake.db");
+const path = require("path");
 
+const dbPath = path.join(__dirname, "data", "snake.db");
+const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+        console.error("Erreur ouverture DB:", err.message);
+    } else {
+        console.log("Connecté à la base SQLite :", dbPath);
+    }
+});
 // 🔹 GET difficulté
 app.get("/difficulty/:name", (req, res) => {
     db.get(
@@ -59,6 +67,6 @@ app.get("/leaderboard/:difficulty", (req, res) => {
     });
 });
 
-app.listen(3000, () => {
+app.listen(3000,"0.0.0.0", () => {
     console.log("Server running on http://localhost:3000");
 });
