@@ -12,25 +12,25 @@ Pour réaliser ce tp, j'ai choisi de coder un serveur web représentant une born
 * Démarrage de la partie avec le bouton **Démarrer**, navigation avec les flèches du clavier.
 * Score sauvegardé automatiquement dans le **Leaderboard**.
 ## Installation et Lancement
-### Prerequis
+### Prérequis
 * Docker/ GitHub Codespaces
 * Port **3000** disponible
 ### Étapes 
-1. Cloner le projet
+**1. Cloner le projet**
 ```sh
 git clone https://github.com/Gasthorn/MicroProjetDevOps.git
 ```
-2. Lancer le projet avec Docker Compose
+**2. Lancer le projet avec Docker Compose**
 ```sh
 docker compose up --build
 ```
-3. Ouvrir le jeu
+**3. Ouvrir le jeu**
   * Un message s'affiche dans la console contenant l'URL (ex:`http://localhost:3000`)
   * Accéder à cet URL dans un navigateur
-4. Jouer
+**4. Jouer**
   * Entrez un **pseudonyme de 3 à 5 lettres** dans l'espace prévu en haut de l'écran
   * Choisir la **Difficulté**
   * Cliquer sur **Démarrer**
   * Utiliser les **flèches** pour se déplacer
-5. Leaderboard
+**5. Leaderboard**
   * Les scores sont enregistrés automatiquement dans le leaderboard
